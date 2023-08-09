@@ -15,6 +15,7 @@ class Ball(pygame.sprite.Sprite):
         self.y_velocity = 0
         self.x_velocity = 1  # How many pixels the ball will move left/right
         self.energy_loss = 0.95  # Ball loses energy every time it bounces
+        self.distance_moved = 0
 
     def draw(self, screen):
         screen.blit(self.ball, self.rect)
@@ -22,29 +23,30 @@ class Ball(pygame.sprite.Sprite):
     def movement(self):
         if self.move_left:
             if self.rect.x <= 0:
-                self.rect.x == 0 # The ball cannot move past the boundary
+                self.rect.x == 0  # The ball cannot move past the boundary
             else:
                 self.rect.x -= self.x_velocity
+                self.distance_moved += self.x_velocity
 
         if self.move_right:
             if self.rect.x >= 736:
                 self.rect.x == 736
             else:
                 self.rect.x += self.x_velocity
+                self.distance_moved += self.x_velocity
 
     def vertical(self):
         self.rect.y += self.y_velocity
         self.y_velocity += self.gravity
         if self.rect.y >= 536:  # Ground position
+            self.distance_moved == 0
             self.rect.y = 536  # Ball bouncing
             # Makes it so that the ball is always bouncing at a certain height
-            if self.y_velocity < 1 and self.y_velocity > 0.5:
-                self.y_velocity == 0
-                print(self.y_velocity)
+            if self.y_velocity < 1 and self.y_velocity > 0.45:
+                self.y_velocity = 0
             else:
                 # Velocity becomes negative to switch direction
                 self.y_velocity = -self.y_velocity * self.energy_loss
-                print("Velocity rebound", self.y_velocity)
 
 
 # Initialize pygame
